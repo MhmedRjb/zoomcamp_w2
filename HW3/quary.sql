@@ -16,8 +16,8 @@ ALTER TABLE erpnext-403906.ny_taxi.green_taxi_2022_non_partitioned
 RENAME COLUMN lpep_pickup_datetime_new TO lpep_pickup_datetime,
 RENAME COLUMN lpep_dropoff_datetime_new TO lpep_dropoff_datetime;
 
-CREATE OR REPLACE TABLE erpnext-403906.ny_taxi.green_taxi_2022_partitioned_tripdata
-PARTITION BY DATE(lpep_dropoff_datetime)
+CREATE OR REPLACE TABLE erpnext-403906.ny_taxi.green_taxi_2022_pickup_partitioned_tripdata
+PARTITION BY DATE(lpep_pickup_datetime)
 CLUSTER BY PUlocationID AS (
   SELECT * FROM erpnext-403906.ny_taxi.green_taxi_2022_non_partitioned
 );
@@ -25,9 +25,10 @@ CLUSTER BY PUlocationID AS (
 
 SELECT DISTINCT PULocationID 
 FROM erpnext-403906.ny_taxi.green_taxi_2022_non_partitioned
-WHERE CAST(lpep_dropoff_datetime AS date) > '2022-06-01' or CAST(lpep_pickup_datetime AS date) <= '2022-06-30';
+WHERE CAST(lpep_pickup_datetime  AS date) > '2022-06-01' or CAST(lpep_pickup_datetime AS date) <= '2022-06-30';
 
 
 SELECT DISTINCT PULocationID 
-FROM erpnext-403906.ny_taxi.green_taxi_2022_partitioned_tripdata
-WHERE CAST(lpep_dropoff_datetime AS date) > '2022-06-01' or CAST(lpep_pickup_datetime AS date) <= '2022-06-30';
+FROM erpnext-403906.ny_taxi.green_taxi_2022_pickup_partitioned_tripdata
+WHERE CAST(lpep_pickup_datetime  AS date) > '2022-06-01' or CAST(lpep_pickup_datetime AS date) <= '2022-06-30';
+
